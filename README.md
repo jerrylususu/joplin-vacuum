@@ -3,6 +3,12 @@ Removes attachments (resources) that are not referred (orphaned) in Joplin.
 
 **Always backup and use at your own risk!**
 
+## Requirements
+
+Python 3.6+.
+
+Using `f-string` and `pathlib`. No third-part dependencies.
+
 ## How it works?
 When exporting notes to a JEX file, the attachments not referred will be ignored. JEX file is just a TAR file, and by reading the attachment ids under its `resources` folder, a list of referred attachment can be created. 
 
