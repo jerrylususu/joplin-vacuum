@@ -1,9 +1,9 @@
 # joplin-vacuum
 Removes attachments (resources) that are not referred (orphaned) in Joplin. 
 
-**‼Always backup and use at your own risk!‼**
+**:warning: Always backup and use at your own risk! :warning:**
 
-Tested with Joplin 2.1.9 (prod, win32) Revision: 882d66383, Python 3.8. 
+Tested with Joplin 2.1.9 (prod, win32) Revision: 882d66383 + Python 3.8. 
 
 ## Requirements
 
@@ -41,26 +41,30 @@ optional arguments:
 
 1. Backup the Joplin database, by close Joplin and copy the `joplin-desktop` folder. (The full path can be find using the `Settings - General` panel)
 
-2. Disable automatic synchronization for now, in order to prevent sync is triggered during the vacuum process. (`Settings - Synchronization - Synchronization interval - Disabled`) Also, do not perform any update on other clients.
+2. Disable automatic synchronization for now, in order to prevent sync being triggered during the vacuum process. (`Settings - Synchronization - Synchronization interval - Disabled`) Also, do not perform any update on other clients to avoid versioning issues.
 
 3. Start Joplin, and export all notes to a JEX file. (`File - Export All - JEX`)
 
-4. Run the script in dry-run mode. 
-   ```
+4. Run the script in dry-run mode. For the first run you will need to grant access from Joplin GUI. Check if the orphaned files found are actually orphan or not. 
+   ```bash
    python vacuum.py [JEX_PATH]
    ```
 
-5. Run the script using `--test-del-1` and `--confirm` flag. This will removes 1 orphaned attachments will leaving others intact. This step checks if everything is working, including the deletion operation. Try to initiate sync after this step. If Joplin shows `Removing remote object: 1` and finishes the sync, then it's good to go.
-    ```
+5. Run the script using `--test-del-1` and `--confirm` flag. This will removes 1 orphaned attachment while leaving others intact. This step checks if everything is working, including the deletion operation. Try to initiate sync after this step. If Joplin shows `Removing remote object: 1` and finishes the sync, then it's good to go.
+    ```bash
     python vacuum.py [JEX_PATH] --confirm --test-del-1
     ```
 
 6. If it works fine, only use `--confirm` flag to remove all orphaned attachments.
-    ```
+    ```bash
     python vacuum.py [JEX_PATH] --confirm
     ```
 
 7. Perform a manual sync (by pressing `Ctrl+S` or click the `Synchronize` button), and check the count of `Removing remote object` is as expected. If the manual sync finished successfully, then you can enable the automatic sync, as well as manually sync on other devices.
+
+## Additional Info
+
+1. It is possible to perform the vacuum process without human intervention (e.g. use `cron` to schedule). But it is not recommended. First, you will need other tools that can create a JEX export programmatically. Then, performing the vacuum without disabling all writing may cause inconsistencies on states. 
 
 ## Example Output
 
