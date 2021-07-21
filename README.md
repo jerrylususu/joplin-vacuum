@@ -3,6 +3,8 @@ Removes attachments (resources) that are not referred (orphaned) in Joplin.
 
 **‼Always backup and use at your own risk!‼**
 
+Tested with Joplin 2.1.9 (prod, win32) Revision: 882d66383, Python 3.8. 
+
 ## Requirements
 
 Python 3.6+ (for `f-string`)
@@ -36,22 +38,32 @@ optional arguments:
 ```
 
 ## Recommend Procedure
+
 1. Backup the Joplin database, by close Joplin and copy the `joplin-desktop` folder. (The full path can be find using the `Settings - General` panel)
-2. Start Joplin, and export all notes to a JEX file. (`File - Export All - JEX`)
-3. Run the script in dry-run mode. 
+
+2. Disable automatic synchronization for now, in order to prevent sync is triggered during the vacuum process. (`Settings - Synchronization - Synchronization interval - Disabled`) Also, do not perform any update on other clients.
+
+3. Start Joplin, and export all notes to a JEX file. (`File - Export All - JEX`)
+
+4. Run the script in dry-run mode. 
    ```
    python vacuum.py [JEX_PATH]
    ```
-4. Run the script using `--test-del-1` and `--confirm` flag. This will removes 1 orphaned attachments will leaving others intact. This step checks if everything is working, including the deletion operation. Try to initiate sync after this step. If Joplin shows `Removing remote object: 1` and finishes the sync, then it's good to go.
+
+5. Run the script using `--test-del-1` and `--confirm` flag. This will removes 1 orphaned attachments will leaving others intact. This step checks if everything is working, including the deletion operation. Try to initiate sync after this step. If Joplin shows `Removing remote object: 1` and finishes the sync, then it's good to go.
     ```
     python vacuum.py [JEX_PATH] --confirm --test-del-1
     ```
-5. If it works fine, only use `--confirm` flag to remove all orphaned attachments.
+
+6. If it works fine, only use `--confirm` flag to remove all orphaned attachments.
     ```
     python vacuum.py [JEX_PATH] --confirm
     ```
 
+7. Perform a manual sync (by pressing `Ctrl+S` or click the `Synchronize` button), and check the count of `Removing remote object` is as expected. If the manual sync finished successfully, then you can enable the automatic sync, as well as manually sync on other devices.
+
 ## Example Output
+
 ```
 $ python vacuum.py .\2021-07-21.jex --confirm
 trying port 41184 200 OK port find!
