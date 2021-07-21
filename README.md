@@ -49,7 +49,7 @@ trying port 41184 200 OK port find!
 loading token from file
 requesting page 1... 200 OK got 26, total 26, has_more False
 referred: 17, all 26
-not_referred count: 9
+orphaned count: 9
 
 id - filename
 --------------------------------------

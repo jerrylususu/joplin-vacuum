@@ -108,7 +108,7 @@ def diff(referred, all):
 
     not_referred = set(all_set).difference(referred_set)
 
-    print("not_referred count:", len(not_referred))
+    print("orphaned count:", len(not_referred))
     print("")
 
     print("id - filename")
