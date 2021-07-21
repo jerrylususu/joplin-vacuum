@@ -1,13 +1,13 @@
 # joplin-vacuum
 Removes attachments (resources) that are not referred (orphaned) in Joplin. 
 
-**Always backup and use at your own risk!**
+**‼Always backup and use at your own risk!‼**
 
 ## Requirements
 
-Python 3.6+.
+Python 3.6+ (for `f-string`)
 
-Using `f-string` and `pathlib`. No third-part dependencies.
+No third-party dependencies.
 
 ## How it works?
 When exporting notes to a JEX file, the attachments not referred will be ignored. JEX file is just a TAR file, and by reading the attachment ids under its `resources` folder, a list of referred attachment can be created. 
@@ -16,6 +16,9 @@ In Joplin, a full list of all attachments can be found via `Tools` - `Note Attac
 
 Thus, the attachments that are not referred (orphaned) can be calculated using the difference between the all attachment set and the referred attachment set.
 
+### Related Links
+- The issue of orphaned resources: [orphaned resources don’t get deleted - Issue #932 - Joplin](https://github.com/laurent22/joplin/issues/932)
+- A cleaning solution based on direct DB access: [patrick-atgithub/joplintool](https://github.com/patrick-atgithub/joplintool)
 ## Usage
 ```
 usage: vacummer.py [-h] [--port PORT] [--token TOKEN] [--limit LIMIT] [--confirm] [--test-del-1] jex_path
