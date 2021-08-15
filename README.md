@@ -39,11 +39,11 @@ optional arguments:
 
 ## Recommend Procedure
 
-1. Backup the Joplin database, by close Joplin and copy the `joplin-desktop` folder. (The full path can be find using the `Settings - General` panel)
+1. Start Joplin, and export all notes to a JEX file. (`File - Export All - JEX`)
 
-2. Disable automatic synchronization for now, in order to prevent sync being triggered during the vacuum process. (`Settings - Synchronization - Synchronization interval - Disabled`) Also, do not perform any update on other clients to avoid versioning issues.
+2. Backup the Joplin database, by close Joplin and copy the `joplin-desktop` folder. (The full path can be find using the `Settings - General` panel)
 
-3. Start Joplin, and export all notes to a JEX file. (`File - Export All - JEX`)
+3. Disable automatic synchronization for now, in order to prevent sync being triggered during the vacuum process. (`Settings - Synchronization - Synchronization interval - Disabled`) Also, do not perform any update on other clients to avoid versioning issues.
 
 4. Run the script in dry-run mode. For the first run you will need to grant access from Joplin GUI. Check if the orphaned files found are actually orphan or not. 
    ```bash
