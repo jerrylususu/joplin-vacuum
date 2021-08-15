@@ -23,7 +23,7 @@ Thus, the attachments that are not referred (orphaned) can be calculated using t
 - A cleaning solution based on direct DB access: [patrick-atgithub/joplintool](https://github.com/patrick-atgithub/joplintool)
 ## Usage
 ```
-usage: vacummer.py [-h] [--port PORT] [--token TOKEN] [--limit LIMIT] [--confirm] [--test-del-1] jex_path
+usage: vacuum.py [-h] [--port PORT] [--token TOKEN] [--limit LIMIT] [--confirm] [--test-del-1] jex_path
 
 positional arguments:
   jex_path       Path to the JEX file
