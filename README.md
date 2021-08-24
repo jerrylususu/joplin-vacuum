@@ -5,6 +5,12 @@ Removes attachments (resources) that are not referred (orphaned) in Joplin.
 
 Tested with Joplin 2.1.9 (prod, win32) Revision: 882d66383 + Python 3.8. 
 
+## Known Limitations
+Check [the discussion on Joplin forum](https://discourse.joplinapp.org/t/joplin-vacuum-a-python-script-to-remove-orphaned-resources/19742).
+1. Resources that are only referred in note histories are marked as orphaned. 
+2. If the sync is incomplete, or the states of Joplin across all devices are not the same, this script might cause resources used in current version accidentally deleted.
+
+
 ## Requirements
 
 Python 3.6+ (for `f-string`)
@@ -21,6 +27,7 @@ Thus, the attachments that are not referred (orphaned) can be calculated using t
 ### Related Links
 - The issue of orphaned resources: [orphaned resources don’t get deleted - Issue #932 - Joplin](https://github.com/laurent22/joplin/issues/932)
 - A cleaning solution based on direct DB access: [patrick-atgithub/joplintool](https://github.com/patrick-atgithub/joplintool)
+- Joplin Batch Web: A Web interface for performing Joplin cleaning jobs [Joplin Batch (rxliuli.com)](https://joplin-utils.rxliuli.com/joplin-batch-web/#/unusedResource).
 ## Usage
 ```
 usage: vacuum.py [-h] [--port PORT] [--token TOKEN] [--limit LIMIT] [--confirm] [--test-del-1] jex_path
@@ -38,6 +45,7 @@ optional arguments:
 ```
 
 ## Recommend Procedure
+0. Before proceeding, make sure Joplin on all of your devices are synced to a same state. 
 
 1. Start Joplin, and export all notes to a JEX file. (`File - Export All - JEX`)
 
