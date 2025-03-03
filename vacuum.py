@@ -31,36 +31,55 @@ def auth(port, provided_token = None):
         return provided_token
 
     if Path(".joplin_token").exists():
-        with open(".joplin_token","r",encoding="utf8") as f:
-            resp = json.load(f)
-            print("loading token from file")
-            return resp["token"]
+        try:
+            with open(".joplin_token", "r", encoding="utf8") as f:
+                saved_token = json.load(f)
+                print("loading token from file")
+                return saved_token["token"]
+        except (json.JSONDecodeError, KeyError):
+            print("saved token file is invalid, requesting new token")
+            Path(".joplin_token").unlink(missing_ok=True)
 
-    print("no existing token found, requesting")
+    print("requesting new auth token")
+    # Step 1: Get initial auth token
     req = request.Request(f"http://localhost:{port}/auth")
-    with request.urlopen(req, data=b"") as f:
-        print(f.status, f.reason)
-        if f.status == 200:
-            resp = json.loads(f.read().decode("utf-8"))
-            print("Token requested. Please check the joplin app to grant access.")
+    try:
+        with request.urlopen(req, data=b"") as f:
+            if f.status != 200:
+                raise Exception(f"Failed to get auth token: {f.status} {f.reason}")
+            auth_response = json.loads(f.read().decode("utf-8"))
+            if "auth_token" not in auth_response:
+                raise Exception("No auth_token in response")
+            
+            initial_token = auth_response["auth_token"]
+            print("Token requested. Please check the Joplin app to grant access.")
             input("Press enter after granting access.")
-    
-    token = resp["auth_token"]
 
-    req = request.Request(f"http://localhost:{port}/auth/check?auth_token={token}")
-    with request.urlopen(req) as f:
-        print(f.status, f.reason)
-        if f.status == 200:
-            resp = json.loads(f.read().decode("utf-8"))
-            print(resp)
-            if resp["status"] == "accepted":
-                print("auth success!")
-
-    with open(".joplin_token","w",encoding="utf8") as f:
-        print("saving token to file")
-        json.dump(resp, f)
-
-    return resp["token"]
+        # Step 2: Check auth status with the initial token
+        check_req = request.Request(f"http://localhost:{port}/auth/check?auth_token={initial_token}")
+        with request.urlopen(check_req) as f:
+            if f.status != 200:
+                raise Exception(f"Auth check failed: {f.status} {f.reason}")
+            
+            check_response = json.loads(f.read().decode("utf-8"))
+            if check_response.get("status") != "accepted":
+                raise Exception("Authorization was not accepted")
+            
+            if "token" not in check_response:
+                raise Exception("No token in response after authorization")
+            
+            print("Authorization successful!")
+            
+            # Save the final token
+            with open(".joplin_token", "w", encoding="utf8") as f:
+                print("saving token to file")
+                json.dump(check_response, f)
+            
+            return check_response["token"]
+            
+    except Exception as e:
+        print(f"Error during authorization: {str(e)}")
+        raise Exception("Failed to complete authorization process") from e
 
 def get_joplin_resources(port, token, limit):
     has_more = True
